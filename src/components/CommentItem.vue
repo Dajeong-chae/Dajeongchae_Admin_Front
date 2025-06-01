@@ -20,7 +20,7 @@ defineProps<{
 }
 
 .comment-item:hover {
-  background-color: rgba(255, 91, 53, 0.5);
+  background-color: rgba(255, 130, 46, 0.5);
   cursor: pointer;
 }
 
