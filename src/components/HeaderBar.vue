@@ -2,8 +2,8 @@
 
 <template>
   <header class="header-bar">
-    <h1 class="title">다정단</h1>
-    <div class="left-label">Admin 화면입니다.</div>
+    <h1 class="main-title">다정단</h1>
+    <div class="description">Admin 화면입니다.</div>
   </header>
 </template>
 
@@ -11,20 +11,21 @@
 .header-bar {
   background-color: #ff5b35;
   width: 100%;
-  padding: 1rem 2rem;
+  height: 5rem;
+  padding: 0 2rem;
   color: white;
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-.title {
+.main-title {
   font-size: 2rem;
   font-weight: bold;
   margin-right: 1rem;
 }
 
-.left-label {
+.description {
   font-size: 0.9rem;
 }
 </style>
