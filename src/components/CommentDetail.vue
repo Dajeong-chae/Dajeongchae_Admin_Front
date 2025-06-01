@@ -2,14 +2,18 @@
 import PostDetail from "./PostDetail.vue";
 import MessageLine from "./MessageLine.vue";
 
-import { ref } from "vue";
+import { ref, watchEffect } from "vue";
+import { updateCommentById } from "../api/adminApi";
 
 const showReasonInput = ref(false); // 악플 버튼 클릭 여부
 const isSubmitted = ref(false); // 등록 버튼 클릭 여부
 const reason = ref(""); // 악플 사유
 
 const props = defineProps<{
-  comment: string;
+  comment: {
+    id: number;
+    content: string;
+  } | null;
   post: {
     id: number;
     title: string;
@@ -19,7 +23,18 @@ const props = defineProps<{
   } | null;
 }>();
 
-// 악플 > 등록 함수
+watchEffect(() => {
+  console.log("댓글:", props.comment);
+  console.log("포스트:", props.post);
+
+  if (props.comment && props.post) {
+    isSubmitted.value = false;
+    showReasonInput.value = false;
+    reason.value = "";
+  }
+});
+
+// TODO: 검토 완료 댓글 (악플)
 function handleSubmit() {
   if (reason.value.trim()) {
     isSubmitted.value = true;
@@ -29,10 +44,20 @@ function handleSubmit() {
   }
 }
 
-// 악플 아님 함수
-function handleNoClick() {
-  showReasonInput.value = false;
-  isSubmitted.value = false;
+// 검토 완료 댓글 (악플아님)
+async function handleNoClick() {
+  if (!props.comment) return;
+
+  try {
+    await updateCommentById(props.comment.id);
+    emit("refresh-comments"); // 상위 컴포넌트에서 댓글 새로고침
+    isSubmitted.value = true;
+    showReasonInput.value = false;
+    reason.value = "";
+  } catch (e) {
+    console.error("댓글 수정 실패:", e);
+    alert("댓글 수정 실패");
+  }
 }
 </script>
 
@@ -61,7 +86,7 @@ function handleNoClick() {
 
         <!-- 버튼 -->
         <div v-if="!showReasonInput" class="button-wrapper">
-          <button class="no-button" @click="handleNoClick">악플 아님</button>
+          <button class="no-button" @click="handleYesClick">악플 아님</button>
           <button class="yes-button" @click="showReasonInput = true">
             악플
           </button>
@@ -69,14 +94,14 @@ function handleNoClick() {
 
         <!-- 이유 입력 -->
         <div v-else class="reason-box">
-          <p class="reason-label">악플이라고 생각하신 이유가 있나요?</p>
+          <p class="reason-label">악플이라고 생각하신 이유는?</p>
           <div class="reason-input-wrapper">
             <input
               v-model="reason"
               placeholder="이유를 입력해주세요"
               class="reason-input"
             />
-            <button class="submit-button" @click="handleSubmit">등록</button>
+            <button class="submit-button" @click="handleYesClick">등록</button>
           </div>
         </div>
       </div>

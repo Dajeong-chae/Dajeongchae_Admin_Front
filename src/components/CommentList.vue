@@ -13,7 +13,7 @@ const safeComments = computed(() => props.comments ?? []);
 const emit = defineEmits(["select-comment"]);
 
 function handleClick(comment: any) {
-  emit("select-comment", comment.id);
+  emit("select-comment", comment);
 }
 </script>
 
@@ -29,6 +29,7 @@ function handleClick(comment: any) {
           v-for="comment in safeComments"
           :key="comment.id"
           :comment="comment"
+          @select="handleClick"
         />
       </template>
       <MessageLine v-else message="댓글이 없어요." />

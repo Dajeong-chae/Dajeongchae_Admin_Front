@@ -12,10 +12,15 @@ const { comment } = defineProps<{
 const formattedDate = computed(() =>
   new Date(comment.created_at).toLocaleDateString("ko-KR")
 );
+
+const emit = defineEmits(["select"]);
+function handleClick() {
+  emit("select", comment);
+}
 </script>
 
 <template>
-  <div class="comment-item">
+  <div class="comment-item" @click="handleClick">
     <p class="text">{{ comment.content }}</p>
     <p class="date">
       {{ formattedDate }}

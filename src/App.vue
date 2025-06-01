@@ -23,18 +23,20 @@ onMounted(async () => {
 // 댓글 상세 조회
 async function handleCommentClick(comment: any) {
   selectedComment.value = comment;
+  console.log("클릭된 댓글:", comment);
 
   try {
     const post = await fetchCommentById(comment.id);
-    selectedPost.value = {
-      title: post.title,
-      content: post.content,
-      image_url: post.image_url,
-      created_at: post.created_at,
-    };
+    console.log("가져온 포스트:", post);
+    selectedPost.value = post;
   } catch (e) {
     console.error("게시글 조회 실패:", e);
   }
+}
+
+// 댓글 재조회
+async function loadComments() {
+  comments.value = await fetchComments(); // 다시 불러옴
 }
 </script>
 
@@ -46,7 +48,17 @@ async function handleCommentClick(comment: any) {
       <CommentList :comments="comments" @select-comment="handleCommentClick" />
     </div>
     <div class="half">
-      <CommentDetail :comment="selectedComment" :post="selectedPost" />
+      <CommentDetail
+        :comment="selectedComment"
+        :post="selectedPost"
+        @deselect-comment="
+          () => {
+            selectedComment = null;
+            selectedPost = null;
+          }
+        "
+        @refresh-comments="loadComments"
+      />
     </div>
   </div>
 </template>
