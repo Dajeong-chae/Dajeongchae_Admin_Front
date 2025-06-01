@@ -25,6 +25,6 @@ import CommentDetail from "./components/CommentDetail.vue";
   width: 50%;
   height: 100%;
   box-sizing: border-box;
-  padding-bottom: 2rem;
+  padding: 1rem 2rem 2.5rem 2rem; /*위오아왼*/
 }
 </style>
