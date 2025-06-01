@@ -1,13 +1,25 @@
 <script setup lang="ts">
-defineProps<{
-  comment: { text: string; date: string };
+import { computed } from "vue";
+
+const { comment } = defineProps<{
+  comment: {
+    id: number;
+    content: string;
+    created_at: string;
+  };
 }>();
+
+const formattedDate = computed(() =>
+  new Date(comment.created_at).toLocaleDateString("ko-KR")
+);
 </script>
 
 <template>
   <div class="comment-item">
-    <p class="text">{{ comment.text }}</p>
-    <p class="date">{{ comment.date }}</p>
+    <p class="text">{{ comment.content }}</p>
+    <p class="date">
+      {{ formattedDate }}
+    </p>
   </div>
 </template>
 

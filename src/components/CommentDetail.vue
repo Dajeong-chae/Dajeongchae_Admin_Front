@@ -1,22 +1,23 @@
 <script setup lang="ts">
 import PostDetail from "./PostDetail.vue";
 import MessageLine from "./MessageLine.vue";
+
 import { ref } from "vue";
 
 const showReasonInput = ref(false); // 악플 버튼 클릭 여부
 const isSubmitted = ref(false); // 등록 버튼 클릭 여부
 const reason = ref(""); // 악플 사유
 
-const selectedComment =
-  "댓글입니다,selectedCommentselec다,selectedCommentselectedCommentselectedComment댓글입니다,selectedCommentselectedCommentselectedComment댓글입니다,selectedCommentselectedCommentselectedComment";
-
-const selectedPost = ref({
-  id: 1,
-  title: "테스트 글입니다",
-  content: "글 내용을 작성해봅니다.",
-  image_url: "https://ifh.cc/g/y0c5dR.jpg",
-  created_at: "2025-05-29",
-});
+const props = defineProps<{
+  comment: string;
+  post: {
+    id: number;
+    title: string;
+    content: string;
+    image_url: string | null;
+    created_at: string;
+  } | null;
+}>();
 
 // 악플 > 등록 함수
 function handleSubmit() {
@@ -30,7 +31,8 @@ function handleSubmit() {
 
 // 악플 아님 함수
 function handleNoClick() {
-  selectedPost.value = null;
+  showReasonInput.value = false;
+  isSubmitted.value = false;
 }
 </script>
 
@@ -44,17 +46,17 @@ function handleNoClick() {
       <MessageLine message="등록되었습니다." />
     </template>
 
-    <template v-else-if="selectedPost">
+    <template v-else-if="props.comment && props.post">
       <!-- 게시글 -->
       <div class="post-scroll">
-        <PostDetail :post="selectedPost" />
+        <PostDetail :post="props.post" />
       </div>
 
       <!-- 댓글 및 판단 -->
       <div class="comment-wrapper">
         <div class="comment">
           <img src="../assets/comment.png" />
-          <p>{{ selectedComment }}</p>
+          <p>{{ props.comment.content }}</p>
         </div>
 
         <!-- 버튼 -->
