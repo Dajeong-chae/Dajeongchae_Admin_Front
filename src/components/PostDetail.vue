@@ -32,10 +32,6 @@ function formatDate(dateStr: string): string {
       <img :src="post.image_url" alt="게시글 이미지" class="post-image" />
     </div>
   </div>
-
-  <div class="post-foot">
-    <p>본문보러 가기</p>
-  </div>
 </template>
 
 <style scoped>
@@ -60,16 +56,9 @@ function formatDate(dateStr: string): string {
 }
 
 .post-image {
-  max-height: 200px;
+  max-height: 100px;
   width: auto;
   object-fit: contain;
   margin: 1rem 0;
-}
-
-.post-foot {
-  font-size: 0.8rem;
-  color: #7c7c7c;
-  text-decoration: underline;
-  text-align: right;
 }
 </style>

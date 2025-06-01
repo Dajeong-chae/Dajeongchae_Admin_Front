@@ -29,7 +29,7 @@ const comments = [
     <p>모델에 의해 <span>애매</span>하다고 분류된 댓글입니다.</p>
   </div>
 
-  <div class="scroll-wrapper">
+  <div class="comment-scroll">
     <div class="comment-list">
       <template v-if="comments.length > 0">
         <CommentItem
@@ -52,7 +52,7 @@ span {
   color: #ff5b35;
 }
 
-.scroll-wrapper {
+.comment-scroll {
   border: 2px solid #ff5b35;
   border-radius: 20px;
   overflow: hidden;
