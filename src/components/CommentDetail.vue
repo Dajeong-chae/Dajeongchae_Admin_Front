@@ -23,6 +23,10 @@ const props = defineProps<{
   } | null;
 }>();
 
+const emit = defineEmits<{
+  (e: "refresh-comments"): void;
+}>();
+
 watchEffect(() => {
   console.log("댓글:", props.comment);
   console.log("포스트:", props.post);
@@ -86,7 +90,7 @@ async function handleNoClick() {
 
         <!-- 버튼 -->
         <div v-if="!showReasonInput" class="button-wrapper">
-          <button class="no-button" @click="handleYesClick">악플 아님</button>
+          <button class="no-button" @click="handleNoClick">악플 아님</button>
           <button class="yes-button" @click="showReasonInput = true">
             악플
           </button>
@@ -101,7 +105,7 @@ async function handleNoClick() {
               placeholder="이유를 입력해주세요"
               class="reason-input"
             />
-            <button class="submit-button" @click="handleYesClick">등록</button>
+            <button class="submit-button" @click="handleNoClick">등록</button>
           </div>
         </div>
       </div>
