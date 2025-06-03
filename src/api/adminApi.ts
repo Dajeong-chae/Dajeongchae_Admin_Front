@@ -12,9 +12,18 @@ export async function fetchCommentById(commentId: number) {
   return response.data;
 }
 
-// 댓글 수정
+// 댓글 수정 - 악플 아님
 export async function updateCommentById(commentId: number) {
   const response = await adminClient.put(`/${commentId}`);
+  return response.data;
+}
+
+// 댓글 수정 - 악플
+export async function updateHateCommentById(
+  commentId: number,
+  content: string
+) {
+  const response = await adminClient.put(`/block/${commentId}`, { content });
   return response.data;
 }
 

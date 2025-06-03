@@ -1,4 +1,3 @@
-<!-- 메세지 한줄 -->
 <script setup lang="ts">
 defineProps<{ message: string }>();
 </script>

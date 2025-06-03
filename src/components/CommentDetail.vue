@@ -3,10 +3,10 @@ import PostDetail from "./PostDetail.vue";
 import MessageLine from "./MessageLine.vue";
 
 import { ref, watchEffect } from "vue";
-import { updateCommentById } from "../api/adminApi";
+import { updateCommentById, updateHateCommentById } from "../api/adminApi";
 
 const showReasonInput = ref(false); // 악플 버튼 클릭 여부
-const isSubmitted = ref(false); // 등록 버튼 클릭 여부
+const isSubmitted = ref(false); // 댓글 검토 완료 여부
 const reason = ref(""); // 악플 사유
 
 const props = defineProps<{
@@ -38,11 +38,25 @@ watchEffect(() => {
   }
 });
 
-// TODO: 검토 완료 댓글 (악플)
-function handleSubmit() {
+// 검토 완료 댓글 (악플)
+async function handleYesClick() {
+  if (!props.comment) return;
+
   if (reason.value.trim()) {
-    isSubmitted.value = true;
-    showReasonInput.value = false;
+    try {
+      const result = await updateHateCommentById(
+        props.comment.id,
+        reason.value
+      );
+      console.log("악플 수정 응답:", result); // 응답 확인 로그
+      emit("refresh-comments"); // 상위 컴포넌트에서 댓글 새로고침
+      isSubmitted.value = true;
+      showReasonInput.value = false;
+      reason.value = "";
+    } catch (e) {
+      console.error("악플 댓글 수정 실패:", e);
+      alert("댓글 수정 실패");
+    }
   } else {
     alert("이유를 입력해주세요.");
   }
@@ -105,7 +119,7 @@ async function handleNoClick() {
               placeholder="이유를 입력해주세요"
               class="reason-input"
             />
-            <button class="submit-button" @click="handleNoClick">등록</button>
+            <button class="submit-button" @click="handleYesClick">등록</button>
           </div>
         </div>
       </div>
